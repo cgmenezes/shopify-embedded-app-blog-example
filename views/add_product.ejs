@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdn.shopify.com/s/assets/external/app.js"></script>
+	<script type="text/javascript">
+	ShopifyApp.init({
+		apiKey: '<%= api_key %>',
+		shopOrigin: 'https://<%= shop %>.myshopify.com'
+	});
+	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link rel='stylesheet' href='/stylesheets/foundation.min.css' />
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<title><%= title %></title>
+</head>
+<body>
+	<script type="text/javascript">
+	ShopifyApp.ready(function(){
+		ShopifyApp.Bar.initialize({
+			buttons: {
+				primary: {
+					label: "Save",
+					message: 'bar_save'
+				},
+				secondary: [
+					{ 
+						label: "More",
+						type: "dropdown",
+						links: [
+							{ label: "Update", href: "/update", target: "app" },
+							{ label: "Delete", callback: function(){ alert("destroy") } }
+						]
+					},
+					{ 
+						label: "Preview", href: 'http://<%= shop %>.myshopify.com', 
+						target: "new" 
+					},
+					{ 
+						label: "Open Modal", 
+						callback: function() {
+							ShopifyApp.Modal.open({
+							  src: 'http://localhost:3000/modal_content',
+							  title: 'A new modal',
+							  width: 'small',
+							  height: 300,
+							  buttons: {
+							    primary: { label: "OK" },
+							    secondary: [
+							      { label: "Cancel", callback: function (label) { ShopifyApp.Modal.close(); } }
+							    ]
+							  }
+							});
+						}
+					}
+				]
+			},
+			title: '<%= title %>',
+			icon: '/images/logo.png',
+			breadcrumb: {
+				label: "Products",
+				href: "/products",
+				target: 'app',
+				loading: false
+			}
+		});
+		ShopifyApp.Bar.loadingOff()
+
+		$('.product_submit').on('click', function(e){
+			e.preventDefault();
+    	$.ajax({
+        url: '/products',
+        type: 'POST',
+        data: $('form').serialize(),
+        success: function(data){
+          ShopifyApp.flashNotice("Product Uploaded Successfully");
+          $('form')[0].reset();
+        },
+        error: function() {
+        	ShopifyApp.flashError("Warning: Product Uploaded Failed");
+        }
+      })
+    });
+
+		$('.open_modal').on('click', function() {
+			
+		})
+
+	});
+	</script>
+	<h1><%= title %></h1>
+	<p>Welcome to <%= title %>, Add a Product Below</p>
+	  <form>
+		  <div class="row">
+		    <div class="large-4 columns">
+		      <div class="row collapse">
+		        <label>Title</label>
+		        <div class="small-12 columns">
+		          <input type="text" placeholder="Product Name" name="title" />
+		        </div>
+		        <label>Description</label>
+		        <div class="small-12 columns">
+		          <input type="text" placeholder="Product Description" name="body_html" />
+		        </div>
+		        <label>Image Url</label>
+		        <div class="small-12 columns">
+		          <input type="text" placeholder="Image Url" name="image_src" />
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="row">
+		    <div class="large-4 columns">
+		    	<button class="button product_submit">Submit</button>
+		    </div>
+		  </div>
+		</form>
+</body>
+</html>

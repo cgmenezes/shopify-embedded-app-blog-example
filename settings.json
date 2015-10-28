@@ -1,0 +1,9 @@
+{
+	"oauth": {
+		"api_key": "your_api_key",
+		"client_secret": "your_app_secret",
+		"redirect_uri": "http://localhost:3000/access_token",
+		"scope": "read_themes,write_themes,write_customers,read_script_tags,write_script_tags,read_products,write_products"
+	},
+	"app_url": "//localhost:3000"
+}

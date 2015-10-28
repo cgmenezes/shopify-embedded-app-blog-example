@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdn.shopify.com/s/assets/external/app.js"></script>
+	<script type="text/javascript">
+	ShopifyApp.init({
+		apiKey: '<%= api_key %>',
+		shopOrigin: 'https://<%= shop %>.myshopify.com'
+	});
+	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link rel='stylesheet' href='/stylesheets/foundation.min.css' />
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<title><%= title %></title>
+</head>
+<body>
+	<script type="text/javascript">
+	ShopifyApp.ready(function(){
+		ShopifyApp.Bar.initialize({
+			buttons: {
+				primary: {
+					label: "Add A Product",
+					href: '/'
+				},
+				secondary: [
+					{ 
+						label: "Preview", href: 'http://<%= shop %>.myshopify.com', 
+						target: "new"
+					}
+				]
+			},
+			pagination: {
+	    next: {
+	      href: "/products?page=<%= next %>"
+	    },
+	    previous: {
+	      href: "/products?page=<%= previous %>"
+	    }
+	  },
+			title: '<%= title %>',
+			icon: '/images/logo.png'
+		});
+		ShopifyApp.Bar.loadingOff();
+	});
+	</script>
+	<div class="row">
+		<div class="large-12 columns">
+			<h1><%= title %></h1>
+			<table>
+			<% for(var i=0; i < products.length; i++) { %>
+			   <tr>
+			     <td><%= products[i].title %></td>
+			   </tr>
+			<% } %>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+	  	<div class="small-12 columns">
+        <a href="/add_product">Add A Product</a>
+      </div>
+	  </div>
+</body>
+</html>
